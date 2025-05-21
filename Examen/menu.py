@@ -2,7 +2,7 @@
 from conversion import infija_a_postfija
 from evaluacion import evaluar_postfija
 
-# Muestra las opciones disponibles al usuario
+# Muestra el menú de opciones al usuario
 def mostrar_menu():
     print("\n--- MENÚ ---")
     print("1. Convertir expresión infija a postfija")
@@ -16,10 +16,10 @@ def ejecutar_opcion(opcion):
         postfija = infija_a_postfija(expr)
         print("Resultado:", postfija)
     elif opcion == '2':
-        expr = input("Ingrese la expresión postfija (solo dígitos y operadores): ")
+        expr = input("Ingrese la expresión postfija (con espacios entre tokens): ")
         resultado = evaluar_postfija(expr)
         print("Resultado:", resultado)
     elif opcion == '3':
         print("Saliendo del programa...")
     else:
-        print("Opción inválida.")   
+        print("Opción inválida.")

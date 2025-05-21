@@ -10,7 +10,7 @@ class Pila:
     def pop(self):
         if not self.is_empty():
             return self.items.pop()  # Remueve y devuelve el tope de la pila
-        return None
+        return None  # Si la pila está vacía, retorna None
 
     def peek(self):
         if not self.is_empty():
@@ -22,4 +22,3 @@ class Pila:
 
     def clear(self):
         self.items = []  # Vacía completamente la pila
-

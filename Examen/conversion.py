@@ -1,38 +1,63 @@
-### conversion.py ###
+ ### conversion.py ###
 from pila import Pila
 
-# Prioridad de operadores (de mayor a menor)
+  # Prioridad de operadores (de mayor a menor)
 precedencia = {'^': 3, '*': 2, '/': 2, '+': 1, '-': 1}
 
-# Verifica si un símbolo es un operador válido
+  # Verifica si un símbolo es un operador válido
 def es_operador(simbolo):
-    return simbolo in '+-*/^'
+      return simbolo in '+-*/^'
 
-# Convierte una expresión en notación infija a notación postfija (RPN)
+  # Valida que la expresión sea una infija simple con operandos y operadores alternados
+def es_infija_valida(expresion):
+      simbolos = list(expresion.replace(' ', ''))
+      parentesis = 0
+      ultimo = ''
+
+      for simbolo in simbolos:
+          if simbolo == '(':
+              parentesis += 1
+          elif simbolo == ')':
+              parentesis -= 1
+              if parentesis < 0:
+                  return False
+          elif simbolo.isalnum():
+              if ultimo.isalnum():
+                  return False
+          elif es_operador(simbolo):
+              if ultimo in ('', '(', '+', '-', '*', '/', '^'):
+                  return False
+          else:
+              return False
+          ultimo = simbolo
+
+      return parentesis == 0 and ultimo not in '+-*/^('
+
+  # Convierte una expresión infija a postfija (con validación)
 def infija_a_postfija(expresion):
-    pila = Pila()  # Pila para operadores
-    salida = []    # Lista para la expresión en postfijo
-    simbolos = list(expresion.replace(' ', ''))  # Elimina espacios y separa en símbolos
+      if not es_infija_valida(expresion):
+          return "Error: solo se permiten expresiones infijas como '2+2', '1/2+3*2', etc."
 
-    for simbolo in simbolos:
-        if simbolo.isalnum():
-            salida.append(simbolo)  # Si es operando, va directo a la salida
-        elif simbolo == '(':
-            pila.push(simbolo)  # Abre paréntesis: se guarda en la pila
-        elif simbolo == ')':
-            # Cierra paréntesis: desapilar hasta encontrar '('
-            while not pila.is_empty() and pila.peek() != '(':
-                salida.append(pila.pop())
-            pila.pop()  # Elimina el '('
-        elif es_operador(simbolo):
-            # Manejo de precedencia de operadores
-            while (not pila.is_empty() and pila.peek() != '(' and
-                   precedencia.get(simbolo, 0) <= precedencia.get(pila.peek(), 0)):
-                salida.append(pila.pop())
-            pila.push(simbolo)  # Coloca el operador en la pila
+      pila = Pila()
+      salida = []
+      simbolos = list(expresion.replace(' ', ''))
 
-    # Al final, vacía la pila en la salida
-    while not pila.is_empty():
-        salida.append(pila.pop())
+      for simbolo in simbolos:
+          if simbolo.isalnum():
+              salida.append(simbolo)
+          elif simbolo == '(':
+              pila.push(simbolo)
+          elif simbolo == ')':
+              while not pila.is_empty() and pila.peek() != '(':
+                  salida.append(pila.pop())
+              pila.pop()
+          elif es_operador(simbolo):
+              while (not pila.is_empty() and pila.peek() != '(' and
+                     precedencia.get(simbolo, 0) <= precedencia.get(pila.peek(), 0)):
+                  salida.append(pila.pop())
+              pila.push(simbolo)
 
-    return ''.join(salida)
+      while not pila.is_empty():
+          salida.append(pila.pop())
+
+      return ''.join(salida)

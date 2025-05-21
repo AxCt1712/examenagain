@@ -23,4 +23,3 @@ class Pila:
     def clear(self):
         self.items = []  # Vacía completamente la pila
 
-

@@ -1,21 +1,30 @@
 ### evaluacion.py ###
 from pila import Pila
 
-# Evalúa una expresión en notación postfija (solo con números de un dígito)
+# Evalúa una expresión en postfijo (solo números enteros positivos de un dígito)
 def evaluar_postfija(expresion):
-    pila = Pila()  # Pila para los operandos
+    pila = Pila()
 
-    for simbolo in expresion:
-        if simbolo.isdigit():
-            pila.push(int(simbolo))  # Si es número, se apila
-        elif simbolo in '+-*/^':
-            op2 = pila.pop()  # Operando derecho
-            op1 = pila.pop()  # Operando izquierdo
-            # Se realiza la operación correspondiente
-            if simbolo == '+': pila.push(op1 + op2)
-            elif simbolo == '-': pila.push(op1 - op2)
-            elif simbolo == '*': pila.push(op1 * op2)
-            elif simbolo == '/': pila.push(op1 // op2)  # División entera
-            elif simbolo == '^': pila.push(op1 ** op2)  # Potencia
+    try:
+        for simbolo in expresion:
+            if simbolo.isdigit():
+                pila.push(int(simbolo))
+            elif simbolo in '+-*/^':
+                op2 = pila.pop()
+                op1 = pila.pop()
+                if op1 is None or op2 is None:
+                    raise ValueError("Expresión postfija inválida: operandos insuficientes")
+                if simbolo == '+': pila.push(op1 + op2)
+                elif simbolo == '-': pila.push(op1 - op2)
+                elif simbolo == '*': pila.push(op1 * op2)
+                elif simbolo == '/': pila.push(op1 // op2)
+                elif simbolo == '^': pila.push(op1 ** op2)
+            else:
+                raise ValueError(f"Símbolo no válido en expresión postfija: '{simbolo}'")
 
-    return pila.pop()  # Resultado final
+        resultado = pila.pop()
+        if not pila.is_empty():
+            raise ValueError("Expresión postfija inválida: demasiados operandos")
+        return resultado
+    except Exception as e:
+        return f"Error: {str(e)}"

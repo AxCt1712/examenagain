@@ -14,7 +14,7 @@ def ejecutar_opcion(opcion):
     if opcion == '1':
         expr = input("Ingrese la expresión infija: ")
         postfija = infija_a_postfija(expr)
-        print("Expresión postfija:", postfija)
+        print("Resultado:", postfija)
     elif opcion == '2':
         expr = input("Ingrese la expresión postfija (solo dígitos y operadores): ")
         resultado = evaluar_postfija(expr)
@@ -22,4 +22,4 @@ def ejecutar_opcion(opcion):
     elif opcion == '3':
         print("Saliendo del programa...")
     else:
-        print("Opción inválida.")
+        print("Opción inválida.")   
